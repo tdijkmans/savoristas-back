@@ -17,6 +17,25 @@ app.use(bodyParserMiddleWare);
 
 /**
  *
+ * cors middleware:
+ *
+ * Since our api is hosted on a different domain than our client
+ * we are are doing "Cross Origin Resource Sharing" (cors)
+ * Cross origin resource sharing is disabled by express by default
+ * for safety reasons (should everybody be able to use your api, I don't think so!)
+ *
+ * We are configuring cors to accept all incoming requests
+ * If you want to limit this, you can look into "white listing" only certain domains
+ *
+ * docs: https://expressjs.com/en/resources/middleware/cors.html
+ *
+ */
+
+const corsMiddleWare = require("cors");
+app.use(corsMiddleWare());
+
+/**
+ *
  * authMiddleware:
  *
  * When a token is provided:
