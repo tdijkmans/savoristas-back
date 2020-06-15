@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node .",
+    "dev": "npx nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Thomas Dijkmans",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
