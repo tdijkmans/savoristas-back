@@ -3,57 +3,42 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return await queryInterface.bulkInsert(
-      "ingredients",
+      "palettes",
       [
         {
-          name: "zalmfilet",
+          name: "Appeltaart",
+          description: "Grootmoeders tijd",
           createdAt: new Date(),
           updatedAt: new Date(),
+          userId: 1,
         },
         {
-          name: "kaneel",
+          name: "Bruschetta!",
+          description: "Italie op zijn best",
           createdAt: new Date(),
           updatedAt: new Date(),
+          userId: 1,
         },
         {
-          name: "basilicum",
+          name: "Aan de Middelandse Zee",
+          description: "Goed voor ieder bbq",
           createdAt: new Date(),
           updatedAt: new Date(),
+          userId: 2,
         },
         {
-          name: "gember",
+          name: "Gember is geweldig",
+          description: "Maar niet voor iedereen",
           createdAt: new Date(),
           updatedAt: new Date(),
+          userId: 2,
         },
         {
-          name: "tomaten",
+          name: "Knoflook klassieker :-)",
+          description: "Knoflook olijfolie basilicum",
           createdAt: new Date(),
           updatedAt: new Date(),
-        },
-        {
-          name: "appel",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          name: "citroen",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          name: "knoflook",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          name: "olijfolie",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          name: "ui",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          userId: 2,
         },
       ],
       {}
@@ -71,7 +56,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return await queryInterface.bulkDelete("ingredients", null, {});
+    return await queryInterface.bulkDelete("palettes", null, {});
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
