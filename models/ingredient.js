@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     ingredient.belongsToMany(models.palette, {
       through: "paletteIngredients",
-      foreignKey: "paletteId",
+      foreignKey: "ingredientId",
     });
     ingredient.belongsToMany(models.recipe, {
       through: "recipeIngredients",
-      foreignKey: "recipeId",
+      foreignKey: "ingredientId",
     });
   };
   return ingredient;

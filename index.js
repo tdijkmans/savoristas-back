@@ -74,6 +74,12 @@ app.post("/echo", (req, res) => {
 const authRouter = require("./routers/auth");
 app.use("/", authRouter);
 
+const recipesRouter = require("./routers/recipes");
+app.use("/recipes", recipesRouter);
+
+const palettesRouter = require("./routers/palettes");
+app.use("/palettes", palettesRouter);
+
 // Listen for connections on specified port (default is port 4000)
 const { PORT } = require("./config/constants");
 
