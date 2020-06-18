@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
   );
   palette.associate = function (models) {
     palette.belongsTo(models.user);
-    palette.belongsToMany(models.ingredient, { through: "paletteIngredients" });
+    palette.belongsToMany(models.ingredient, {
+      through: "paletteIngredients",
+      foreignKey: "ingredientId",
+    });
 
     // associations can be defined here
   };

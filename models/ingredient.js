@@ -9,7 +9,14 @@ module.exports = (sequelize, DataTypes) => {
   );
   ingredient.associate = function (models) {
     // associations can be defined here
-    ingredient.belongsToMany(models.palette, { through: "paletteIngredients" });
+    ingredient.belongsToMany(models.palette, {
+      through: "paletteIngredients",
+      foreignKey: "paletteId",
+    });
+    ingredient.belongsToMany(models.recipe, {
+      through: "recipeIngredients",
+      foreignKey: "recipeId",
+    });
   };
   return ingredient;
 };

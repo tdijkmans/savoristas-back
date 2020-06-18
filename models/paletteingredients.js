@@ -1,6 +1,6 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const paletteIngredient = sequelize.define(
+  const paletteIngredients = sequelize.define(
     "paletteIngredient",
     {
       hexColor: DataTypes.STRING,
@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  paletteIngredient.associate = function (models) {
+  paletteIngredients.associate = function (models) {
     // associations can be defined here
-    paletteIngredient.belongsTo(models.palette);
-    paletteIngredient.belongsTo(models.ingredient);
+    paletteIngredients.belongsTo(models.palette);
+    paletteIngredients.belongsTo(models.ingredient);
   };
-  return paletteIngredient;
+  return paletteIngredients;
 };
