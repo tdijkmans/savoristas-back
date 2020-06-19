@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
   const Palettes = await Palette.findAndCountAll({
     limit,
     offset,
-    include: [Ingredient],
+    include: [{ model: Ingredient, through: { attributes: ["hexColor"] } }],
     order: [[Ingredient, "createdAt", "DESC"]],
   });
   res.status(200).send({ message: "All Palettes delivered", Palettes });
