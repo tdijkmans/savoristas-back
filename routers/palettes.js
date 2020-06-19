@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const Palette = require("../models").palette;
 const Ingredient = require("../models").ingredient;
+const paletteIngredient = require("../models/").paletteIngredient;
 
 const router = new Router();
 
@@ -27,7 +28,7 @@ router.get("/:id", async (req, res) => {
   }
 
   const palette = await Palette.findByPk(id, {
-    include: [Ingredient],
+    include: [{ model: Ingredient, through: { attributes: ["hexColor"] } }],
     order: [[Ingredient, "createdAt", "DESC"]],
   });
 
