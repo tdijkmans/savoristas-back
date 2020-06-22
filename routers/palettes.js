@@ -1,6 +1,9 @@
 const { Router } = require("express");
+const auth = require("../auth/middleware");
+
 const Palette = require("../models").palette;
 const Ingredient = require("../models").ingredient;
+const paletteIngredient = require("../models").paletteIngredient;
 
 const router = new Router();
 
@@ -40,6 +43,44 @@ router.get("/:id", async (req, res) => {
   res
     .status(200)
     .send({ message: `Palette with id ${id} delivered.`, palette });
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const { name, description, ingredientList, userId } = req.body;
+
+    if (!name || !description || !ingredientList) {
+      return res.status(400).send({
+        message:
+          "Please provide a name, description and at least one ingredient.",
+      });
+    }
+
+    const newPalette = await Palette.create({
+      name: name,
+      description: description,
+      userId: userId,
+    });
+
+    async function asIngredientAndPaletteIngredient(i) {
+      const ingredient = await Ingredient.findOrCreate({
+        where: { name: i.name },
+      });
+
+      await paletteIngredient.create({
+        paletteId: newPalette.id,
+        ingredientId: ingredient[0].dataValues.id,
+        hexColor: i.hexColor,
+      });
+    }
+
+    await ingredientList.map((i) => asIngredientAndPaletteIngredient(i));
+
+    return res.status(200).send({ message: "New palette created." });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "Something went wrong, sorry" });
+  }
 });
 
 module.exports = router;
