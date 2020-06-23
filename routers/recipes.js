@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const Recipe = require("../models").recipe;
 const Ingredient = require("../models").ingredient;
+const RecipeIngredient = require("../models").recipeIngredients;
 
 const router = new Router();
 
@@ -38,6 +39,65 @@ router.get("/:id", async (req, res) => {
   }
 
   res.status(200).send({ message: `Recipe with id ${id} delivered.`, recipe });
+});
+
+router.post("/", auth, async (req, res) => {
+  try {
+    const {
+      name,
+      description,
+      recipeIngredientList,
+      recipeYield,
+      instructions,
+      cookTime,
+      userId,
+      image,
+    } = req.body;
+
+    if (!name || !description || !recipeIngredientList) {
+      return res.status(400).send({
+        message:
+          "Please provide a name, description and at least one ingredient.",
+      });
+    }
+
+    if (!image) {
+      // Current defaulting image, while no image upload is supported yet.
+      const image =
+        " https://static-images.jumbo.com/product_images/Recipe_502710-01_560x560.jpg";
+    }
+
+    const newRecipe = await Recipe.create({
+      image,
+      name: name,
+      description: description,
+      recipeYield: recipeYield,
+      recipeInstructions: instructions,
+      cookTime: cookTime,
+      userId: userId,
+    });
+
+    async function asIngredientAndRecipeIngredient(i) {
+      const ingredient = await Ingredient.findOrCreate({
+        where: { name: i.name },
+      });
+
+      await RecipeIngredient.create({
+        recipeId: newRecipe.id,
+        ingredientId: ingredient[0].dataValues.id,
+        ingredientQuantity: i.ingredientQuantity,
+      });
+    }
+    await recipeIngredientList.map((i) => asIngredientAndRecipeIngredient(i));
+
+    return res.status(200).send({
+      message: "New recipe created.",
+      rec: newRecipe,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ message: "Something went wrong, sorry" });
+  }
 });
 
 module.exports = router;
