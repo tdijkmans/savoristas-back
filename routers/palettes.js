@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
     .send({ message: `Palette with id ${id} delivered.`, palette });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     const { name, description, ingredientList, userId } = req.body;
 

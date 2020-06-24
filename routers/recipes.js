@@ -1,4 +1,7 @@
 const { Router } = require("express");
+const { Op } = require("sequelize");
+
+const auth = require("../auth/middleware");
 const Recipe = require("../models").recipe;
 const Ingredient = require("../models").ingredient;
 const RecipeIngredient = require("../models").recipeIngredients;
@@ -14,7 +17,28 @@ router.get("/", async (req, res) => {
     include: [Ingredient],
     order: [[Ingredient, "createdAt", "DESC"]],
   });
+
   res.status(200).send({ message: "All recipes delivered", recipes });
+});
+
+router.get("/query", async (req, res) => {
+  const queriedIngredients = JSON.parse(req.query.ingredients);
+  console.log("body", req.body);
+  const allRecipes = await Recipe.findAll({
+    include: {
+      model: Ingredient,
+    },
+  });
+  const queriedRecipes = allRecipes.reduce((acc, rec) => {
+    const recipeIngIds = rec.ingredients.map((i) => i.id);
+    const valid = queriedIngredients.every((id) => recipeIngIds.includes(id));
+    return valid ? [...acc, rec] : acc;
+  }, []);
+
+  res.json({
+    message: "Queried recipes",
+    result: queriedRecipes,
+  });
 });
 
 router.get("/:id", async (req, res) => {
