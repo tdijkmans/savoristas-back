@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     limit,
     offset,
     include: [Ingredient],
-    order: [[Ingredient, "createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
   });
 
   res.status(200).send({ message: "All recipes delivered", recipes });
