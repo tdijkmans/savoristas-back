@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
     limit,
     offset,
     include: [{ model: Ingredient, through: { attributes: ["hexColor"] } }],
-    order: [[Ingredient, "createdAt", "DESC"]],
+    order: [["createdAt", "DESC"]],
   });
   res.status(200).send({ message: "All Palettes delivered", Palettes });
 });
@@ -76,7 +76,14 @@ router.post("/", auth, async (req, res) => {
 
     await ingredientList.map((i) => asIngredientAndPaletteIngredient(i));
 
-    return res.status(200).send({ message: "New palette created." });
+    const palette = await Palette.findByPk(newPalette.id, {
+      include: [Ingredient],
+      order: [[Ingredient, "createdAt", "DESC"]],
+    });
+
+    return res
+      .status(200)
+      .send({ message: "New palette created.", Palette: palette });
   } catch (error) {
     console.log(error);
     return res.status(400).send({ message: "Something went wrong, sorry" });
