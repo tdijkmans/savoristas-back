@@ -5,14 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       recipeId: DataTypes.INTEGER,
       ingredientQuantity: DataTypes.STRING,
-      ingredientId: DataTypes.INTEGER,
+      ingredientSpellingId: DataTypes.INTEGER,
     },
     {}
   );
   recipeIngredients.associate = function (models) {
     // associations can be defined here
     recipeIngredients.belongsTo(models.recipe);
-    recipeIngredients.belongsTo(models.ingredient);
+    recipeIngredients.belongsTo(models.ingredientSpelling);
   };
   return recipeIngredients;
 };

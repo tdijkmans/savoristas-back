@@ -5,14 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       hexColor: DataTypes.STRING,
       paletteId: DataTypes.INTEGER,
-      ingredientId: DataTypes.INTEGER,
+      ingredientSpellingId: DataTypes.INTEGER,
     },
     {}
   );
   paletteIngredients.associate = function (models) {
     // associations can be defined here
     paletteIngredients.belongsTo(models.palette);
-    paletteIngredients.belongsTo(models.ingredient);
+    paletteIngredients.belongsTo(models.ingredientSpelling);
   };
   return paletteIngredients;
 };

@@ -1,29 +1,24 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("recipeIngredients", {
+    return queryInterface.createTable("ingredientSpellings", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      recipeId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "recipes",
-          key: "id",
-        },
-      },
-      ingredientQuantity: {
+      spelling: {
         type: Sequelize.STRING,
       },
-      ingredientSpellingId: {
+      plurality: {
+        type: Sequelize.STRING,
+      },
+      synonym: {
+        type: Sequelize.BOOLEAN,
+      },
+      ingredientId: {
         type: Sequelize.INTEGER,
-        references: {
-          model: "ingredientSpellings",
-          key: "id",
-        },
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +31,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("recipeIngredients");
+    return queryInterface.dropTable("ingredientSpellings");
   },
 };
