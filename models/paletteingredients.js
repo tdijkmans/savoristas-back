@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
   paletteIngredients.associate = function (models) {
     // associations can be defined here
     paletteIngredients.belongsTo(models.palette);
-    paletteIngredients.belongsTo(models.ingredientSpelling);
+    paletteIngredients.belongsToMany(models.ingredient, {
+      through: "ingredientSpellings",
+    });
   };
   return paletteIngredients;
 };
