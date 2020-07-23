@@ -5,6 +5,7 @@ const auth = require("../auth/middleware");
 const Recipe = require("../models").recipe;
 const Ingredient = require("../models").ingredient;
 const RecipeIngredient = require("../models").recipeIngredients;
+const IngredientSpelling = require("../models").ingredientSpelling;
 
 const router = new Router();
 
@@ -14,13 +15,14 @@ router.get("/", async (req, res) => {
   const recipes = await Recipe.findAndCountAll({
     limit,
     offset,
-    include: [Ingredient],
+    include: { all: true, nested: true },
     order: [["createdAt", "DESC"]],
   });
 
   res.status(200).send({ message: "All recipes delivered", recipes });
 });
 
+//THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS
 router.get("/query", async (req, res) => {
   const queriedIngredients = JSON.parse(req.query.ingredients);
   console.log("body", req.body);
@@ -52,8 +54,7 @@ router.get("/:id", async (req, res) => {
   }
 
   const recipe = await Recipe.findByPk(id, {
-    include: [Ingredient],
-    order: [[Ingredient, "createdAt", "DESC"]],
+    include: { all: true, nested: true },
   });
 
   if (recipe === null) {
@@ -65,6 +66,7 @@ router.get("/:id", async (req, res) => {
   res.status(200).send({ message: `Recipe with id ${id} delivered.`, recipe });
 });
 
+//THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS
 router.post("/", auth, async (req, res) => {
   try {
     const {

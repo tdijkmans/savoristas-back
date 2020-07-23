@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   const Palettes = await Palette.findAndCountAll({
     limit,
     offset,
-    include: [{ model: Ingredient, through: { attributes: ["hexColor"] } }],
+    include: { all: true, nested: true },
     order: [["createdAt", "DESC"]],
   });
   res.status(200).send({ message: "All Palettes delivered", Palettes });
@@ -30,8 +30,7 @@ router.get("/:id", async (req, res) => {
   }
 
   const palette = await Palette.findByPk(id, {
-    include: [Ingredient],
-    order: [[Ingredient, "createdAt", "DESC"]],
+    include: { all: true, nested: true },
   });
 
   if (palette === null) {
@@ -45,6 +44,7 @@ router.get("/:id", async (req, res) => {
     .send({ message: `Palette with id ${id} delivered.`, palette });
 });
 
+//THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS
 router.post("/", auth, async (req, res) => {
   try {
     const { name, description, ingredientList, userId } = req.body;

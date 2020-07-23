@@ -1,4 +1,7 @@
 "use strict";
+
+const palette = require("./palette");
+
 module.exports = (sequelize, DataTypes) => {
   const paletteIngredients = sequelize.define(
     "paletteIngredient",
@@ -11,10 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   paletteIngredients.associate = function (models) {
     // associations can be defined here
-    paletteIngredients.belongsTo(models.palette);
-    paletteIngredients.belongsToMany(models.ingredient, {
-      through: "ingredientSpellings",
-    });
+    paletteIngredients.belongsTo(models.ingredientSpelling);
   };
   return paletteIngredients;
 };

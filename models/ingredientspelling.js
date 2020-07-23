@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
   const ingredientSpelling = sequelize.define(
-    "IngredientSpelling",
+    "ingredientSpelling",
     {
       spelling: { type: DataTypes.STRING, allowNull: false, unique: true },
 
@@ -13,12 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   );
   ingredientSpelling.associate = function (models) {
     // associations can be defined here
-
     ingredientSpelling.belongsTo(models.ingredient);
-    ingredientSpelling.belongsToMany(models.ingredient, {
-      through: "recipeIngredients",
-      foreignKey: "recipeId",
-    });
   };
+
   return ingredientSpelling;
 };

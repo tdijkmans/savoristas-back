@@ -11,10 +11,8 @@ module.exports = (sequelize, DataTypes) => {
   );
   recipeIngredients.associate = function (models) {
     // associations can be defined here
-    recipeIngredients.belongsTo(models.recipe);
-    recipeIngredients.belongsToMany(models.ingredient, {
-      through: "ingredientSpellings",
-    });
+
+    recipeIngredients.belongsTo(models.ingredientSpelling);
   };
   return recipeIngredients;
 };
