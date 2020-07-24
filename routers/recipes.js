@@ -9,6 +9,7 @@ const IngredientSpelling = require("../models").ingredientSpelling;
 
 const router = new Router();
 
+//TOO EAEGER LAODING!
 router.get("/", async (req, res) => {
   const limit = req.query.limit || 8;
   const offset = req.query.offset || 0;
@@ -114,6 +115,8 @@ router.post("/", auth, async (req, res) => {
         ingredientQuantity: i.ingredientQuantity,
       });
     }
+
+    // HAVE TO RESOLVE THIS ARRAY OF PROMISES OTHERWISE NO RETURNED RESULT BY FINDBYPK
     await recipeIngredientList.map((i) => asIngredientAndRecipeIngredient(i));
 
     return res.status(200).send({

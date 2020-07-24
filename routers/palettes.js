@@ -4,6 +4,8 @@ const auth = require("../auth/middleware");
 const Palette = require("../models").palette;
 const Ingredient = require("../models").ingredient;
 const paletteIngredient = require("../models").paletteIngredient;
+const ingredientSpelling = require("../models").ingredientSpelling;
+const user = require("../models").user;
 
 const router = new Router();
 
@@ -30,7 +32,21 @@ router.get("/:id", async (req, res) => {
   }
 
   const palette = await Palette.findByPk(id, {
-    include: { all: true, nested: true },
+    include: [
+      {
+        model: user,
+        attributes: ["name"],
+      },
+      {
+        model: paletteIngredient,
+        attributes: ["hexColor"],
+
+        include: {
+          model: ingredientSpelling,
+          attributes: ["spelling", "ingredientId"],
+        },
+      },
+    ],
   });
 
   if (palette === null) {
@@ -44,7 +60,6 @@ router.get("/:id", async (req, res) => {
     .send({ message: `Palette with id ${id} delivered.`, palette });
 });
 
-//THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS
 router.post("/", auth, async (req, res) => {
   try {
     const { name, description, ingredientList, userId } = req.body;
@@ -62,31 +77,50 @@ router.post("/", auth, async (req, res) => {
       userId: userId,
     });
 
-    async function asIngredientAndPaletteIngredient(i) {
-      const ingredient = await Ingredient.findOrCreate({
-        where: { name: i.name },
+    async function asSpellingAndPaletteIngredient(i) {
+      const ingredient = await ingredientSpelling.findOne({
+        where: { spelling: i.name },
       });
 
       await paletteIngredient.create({
         paletteId: newPalette.id,
-        ingredientId: ingredient[0].dataValues.id,
+        ingredientSpellingId: ingredient.id,
         hexColor: i.hexColor,
       });
     }
 
-    await ingredientList.map((i) => asIngredientAndPaletteIngredient(i));
+    const toResolvePalette = ingredientList.map((i) =>
+      asSpellingAndPaletteIngredient(i)
+    );
+    await Promise.all(toResolvePalette);
 
     const palette = await Palette.findByPk(newPalette.id, {
-      include: [Ingredient],
-      order: [[Ingredient, "createdAt", "DESC"]],
+      include: [
+        {
+          model: user,
+          attributes: ["name"],
+        },
+        {
+          model: paletteIngredient,
+          attributes: ["hexColor"],
+
+          include: {
+            model: ingredientSpelling,
+            attributes: ["spelling", "ingredientId"],
+          },
+        },
+      ],
     });
 
-    return res
-      .status(200)
-      .send({ message: "New palette created.", Palette: palette });
+    return res.status(200).send({
+      message: `New palette created.`,
+      Palette: palette,
+    });
   } catch (error) {
     console.log(error);
-    return res.status(400).send({ message: "Something went wrong, sorry" });
+    return res
+      .status(400)
+      .send({ message: "Something went wrong, sorry", response: req.body });
   }
 });
 

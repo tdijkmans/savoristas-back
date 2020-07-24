@@ -177,9 +177,9 @@ module.exports = [
   },
   {
     pk: 23,
-    name_NL_S: "verse gember",
+    name_NL_S: "gember",
     name_NL_P: "",
-    name_EN_S: "fresh ginger",
+    name_EN_S: "ginger",
     name_EN_P: null,
     hexcolor: "#ffecb3",
   },
@@ -2461,6 +2461,14 @@ module.exports = [
     name_NL_P: "kaki's",
     name_EN_S: "persimmon",
     name_EN_P: "persimmons",
+    hexcolor: "#F57F17",
+  },
+  {
+    pk: 309,
+    name_NL_S: "haring",
+    name_NL_P: "haringen",
+    name_EN_S: "herring",
+    name_EN_P: "herrings",
     hexcolor: "#F57F17",
   },
 ];
