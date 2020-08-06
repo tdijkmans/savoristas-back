@@ -1,5 +1,5 @@
-const express = require("express");
-const app = express();
+const express = require("express")
+const app = express()
 
 /**
  *
@@ -12,8 +12,8 @@ const app = express();
  *
  */
 
-const bodyParserMiddleWare = express.json();
-app.use(bodyParserMiddleWare);
+const bodyParserMiddleWare = express.json()
+app.use(bodyParserMiddleWare)
 
 /**
  *
@@ -31,8 +31,8 @@ app.use(bodyParserMiddleWare);
  *
  */
 
-const corsMiddleWare = require("cors");
-app.use(corsMiddleWare());
+const corsMiddleWare = require("cors")
+app.use(corsMiddleWare())
 
 /**
  *
@@ -50,7 +50,7 @@ app.use(corsMiddleWare());
  *
  */
 
-const authMiddleWare = require("./auth/middleware");
+const authMiddleWare = require("./auth/middleware")
 
 /**
  * Routes
@@ -59,30 +59,33 @@ const authMiddleWare = require("./auth/middleware");
 
 // GET endpoint for testing purposes, can be removed
 app.get("/", (req, res) => {
-  res.send("Hi from express");
-});
+  res.send("Hi from express")
+})
 
 // POST endpoint for testing purposes, can be removed
 app.post("/echo", (req, res) => {
   res.json({
     youPosted: {
-      ...req.body,
-    },
-  });
-});
+      ...req.body
+    }
+  })
+})
 
-const authRouter = require("./routers/auth");
-app.use("/", authRouter);
+const authRouter = require("./routers/auth")
+app.use("/", authRouter)
 
-const recipesRouter = require("./routers/recipes");
-app.use("/recipes", recipesRouter);
+const recipesRouter = require("./routers/recipes")
+app.use("/recipes", recipesRouter)
 
-const palettesRouter = require("./routers/palettes");
-app.use("/palettes", palettesRouter);
+const palettesRouter = require("./routers/palettes")
+app.use("/palettes", palettesRouter)
+
+const ingredientsRouter = require("./routers/ingredients")
+app.use("/ingredients", ingredientsRouter)
 
 // Listen for connections on specified port (default is port 4000)
-const { PORT } = require("./config/constants");
+const { PORT } = require("./config/constants")
 
 app.listen(PORT, () => {
-  console.log(`Listening on port: ${PORT}`);
-});
+  console.log(`Listening on port: ${PORT}`)
+})

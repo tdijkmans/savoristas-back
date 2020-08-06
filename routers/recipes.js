@@ -13,36 +13,66 @@ const router = new Router()
 
 //This route gets all detailed recipes
 router.get("/", async (req, res) => {
-  const limit = req.query.limit || 10
-  const offset = req.query.offset || 0
+  try {
+    const limit = req.query.limit || 10
+    const offset = req.query.offset || 0
 
-  const recipes = await Recipe.findAndCountAll({
-    limit,
-    offset,
-    order: [["createdAt", "DESC"]],
+    const queryResult = await Recipe.findAndCountAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
 
-    //Prevent returning unneeded information and sensitive information like hashed password
-    attributes: { exclude: ["userId"] },
-    include: [
-      {
-        model: User,
-        attributes: { exclude: ["password", "email", "createdAt", "updatedAt"] } //Prevent returning hashed password
-      },
-      {
-        model: RecipeIngredient,
-        attributes: ["id", "ingredientQuantity"],
+      //Prevent returning unneeded information and sensitive information like hashed password
+      attributes: { exclude: ["userId"] },
+      include: [
+        {
+          model: User,
+          attributes: {
+            exclude: ["password", "email", "createdAt", "updatedAt"]
+          } //Prevent returning hashed password
+        },
+        {
+          model: RecipeIngredient,
+          attributes: ["id", "ingredientQuantity"],
 
-        include: [
-          {
-            model: IngredientSpelling,
-            attributes: ["spelling"]
-          }
-        ]
-      }
-    ]
-  })
+          include: [
+            {
+              model: IngredientSpelling,
+              attributes: ["spelling"]
+            }
+          ]
+        }
+      ]
+    })
 
-  res.status(200).send({ message: "All detailed recipes delivered", recipes })
+    // The recipes list of JSON objects is nested too many levels, so flatten and properly format
+    const formattedRecipes = await queryResult.rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      description: r.description,
+      user: r.user,
+      recipeYield: r.recipeYield,
+      cookTime: r.cookTime,
+      image: r.image,
+      recipeInstructions: r.recipeInstructions,
+      createdAt: r.createdAt,
+      updatedAt: r.updatedAt,
+      recipeIngredients: r.recipeIngredients.map((r) => ({
+        id: r.id,
+        ingredientQuantity: r.ingredientQuantity,
+        recipeIngredient: r.ingredientSpelling.spelling
+      }))
+    }))
+
+    const responseObject = {
+      message: "All detailed recipes delivered",
+      recipes: { count: queryResult.count, rows: formattedRecipes }
+    }
+
+    res.status(200).send(responseObject)
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 //THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS
@@ -61,33 +91,78 @@ router.get("/query", async (req, res) => {
   }, [])
 
   res.json({
-    message: "Queried recipes",
+    message: "Recipes filtered by palette delivered",
     result: queriedRecipes
   })
 })
 
-//This route gets single detailed recipes by ID.
+//This route gets single detailed recipe by ID.
 router.get("/:id", async (req, res) => {
-  const { id } = req.params
+  try {
+    const { id } = req.params
 
-  if (isNaN(parseInt(id))) {
-    return res.status(400).send({
-      message: `${id} is not a valid id number, the recipe does not exist.`
+    if (isNaN(parseInt(id))) {
+      return res.status(400).send({
+        message: `${id} is not a valid id number, the recipe does not exist.`
+      })
+    }
+
+    const recipe = await Recipe.findByPk(id, {
+      //Prevent returning unneeded information and sensitive information like hashed password
+
+      include: [
+        {
+          model: User,
+          attributes: ["id", "name"]
+        },
+        {
+          model: RecipeIngredient,
+          attributes: ["id", "ingredientQuantity"],
+
+          include: [
+            {
+              model: IngredientSpelling,
+              attributes: ["spelling"]
+            }
+          ]
+        }
+      ]
     })
+
+    if (recipe === null) {
+      return res
+        .status(404)
+        .send({ message: `Recipe with id ${id} is not found.` })
+    }
+
+    // The ingredient list of JSON objects is nested too many levels, so flatten and properly format the complete recipe
+    const formattedRecipe = {
+      id: recipe.id,
+      name: recipe.name,
+      description: recipe.description,
+      user: recipe.user,
+      recipeYield: recipe.recipeYield,
+      cookTime: recipe.cookTime,
+      image: recipe.image,
+      recipeInstructions: recipe.recipeInstructions,
+      createdAt: recipe.createdAt,
+      updatedAt: recipe.updatedAt,
+      recipeIngredients: recipe.recipeIngredients.map((i) => ({
+        id: i.id,
+        ingredientQuantity: i.ingredientQuantity,
+        recipeIngredient: i.ingredientSpelling.spelling
+      }))
+    }
+
+    const responseObject = {
+      message: `Recipe with id ${id} delivered.`,
+      recipe: formattedRecipe
+    }
+
+    res.status(200).send(responseObject)
+  } catch (e) {
+    console.log(e)
   }
-
-  const recipe = await Recipe.findByPk(id, {
-    include: { all: true, nested: true }
-  })
-
-  if (recipe === null) {
-    return res
-      .status(404)
-      .send({ message: `Recipe with id ${id} is not found.` })
-  }
-
-  delete recipe.dataValues.user.dataValues.password // don't send back the password hash
-  res.status(200).send({ message: `Recipe with id ${id} delivered.`, recipe })
 })
 
 //THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS

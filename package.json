@@ -10,7 +10,8 @@
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all",
     "createDB": "npx sequelize-cli db:create",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "resetrun": "npx sequelize-cli db:drop && npm run createDB && npm run migrate && npm run seed && npx nodemon ."
   },
   "author": "Thomas Dijkmans",
   "license": "ISC",
