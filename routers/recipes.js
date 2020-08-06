@@ -203,19 +203,21 @@ router.post("/", auth, async (req, res) => {
     })
 
     async function asIngredientAndRecipeIngredient(i) {
-      const ingredient = await Ingredient.findOrCreate({
-        where: { name: i.name }
+      const spelling = await IngredientSpelling.findOne({
+        where: { spelling: i.spelling }
       })
-
+      console.log(spelling)
       await RecipeIngredient.create({
         recipeId: newRecipe.id,
-        ingredientId: ingredient[0].dataValues.id,
+        ingredientSpellingId: spelling.dataValues.id,
         ingredientQuantity: i.ingredientQuantity
       })
     }
 
-    // HAVE TO RESOLVE THIS ARRAY OF PROMISES OTHERWISE NO RETURNED RESULT BY FINDBYPK
-    await recipeIngredientList.map((i) => asIngredientAndRecipeIngredient(i))
+    const toResolve = await recipeIngredientList.map((i) =>
+      asIngredientAndRecipeIngredient(i)
+    )
+    await Promise.all(toResolve)
 
     return res.status(200).send({
       message: "New recipe created.",
