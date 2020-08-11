@@ -10,29 +10,59 @@ const user = require("../models").user
 const router = new Router()
 
 router.get("/", async (req, res) => {
-  const limit = req.query.limit || 8
-  const offset = req.query.offset || 0
-  const Palettes = await Palette.findAndCountAll({
-    limit,
-    offset,
-    include: [
-      {
-        model: user,
-        attributes: ["name"]
-      },
-      {
-        model: paletteIngredient,
-        attributes: ["hexColor", "id"],
+  try {
+    const limit = req.query.limit || 8
+    const offset = req.query.offset || 0
+    const queryResult = await Palette.findAndCountAll({
+      limit,
+      offset,
+      include: [
+        {
+          model: user,
+          attributes: ["name"]
+        },
+        {
+          model: paletteIngredient,
+          attributes: ["hexColor", "id"],
 
-        include: {
-          model: ingredientSpelling,
-          attributes: ["id", "spelling", "ingredientId"]
+          include: {
+            model: ingredientSpelling,
+            attributes: ["id", "spelling", "ingredientId"]
+          }
         }
-      }
-    ],
-    order: [["createdAt", "DESC"]]
-  })
-  res.status(200).send({ message: "All Palettes delivered", Palettes })
+      ],
+      order: [["createdAt", "DESC"]]
+    })
+
+    // The recipes list of JSON objects is nested too many levels, so flatten and properly format
+    const formattedPalettes = await queryResult.rows.map((p) => ({
+      id: p.id,
+      name: p.name,
+      description: p.description,
+      user: { id: p.userId, name: p.user.name },
+      createdAt: p.createdAt,
+      updatedAt: p.updatedAt,
+      paletteIngredients: p.paletteIngredients.map((i) => ({
+        id: i.id,
+        ingredientSpelling: i.ingredientSpelling.spelling,
+        ingredientSpellingId: i.ingredientSpelling.id,
+        hexColor: i.hexColor,
+        ingredientId: i.ingredientSpelling.ingredientId
+      }))
+    }))
+
+    const responseObject = {
+      message: "All palettes delivered",
+      palettes: { count: queryResult.count, rows: formattedPalettes }
+    }
+
+    res.status(200).send(responseObject)
+  } catch (error) {
+    console.log(error)
+    return res
+      .status(400)
+      .send({ message: "Something went wrong, sorry", response: req.body })
+  }
 })
 
 router.get("/:id", async (req, res) => {

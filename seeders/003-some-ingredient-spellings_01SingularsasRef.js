@@ -1,5 +1,5 @@
-"use strict";
-const ingredients = require("../referencedata/curatedIngredients.js");
+"use strict"
+const ingredients = require("../referencedata/curatedIngredients.js")
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -9,14 +9,14 @@ module.exports = {
       plurality: "s",
       synonym: false,
       createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
+      updatedAt: new Date()
+    }))
 
     return await queryInterface.bulkInsert(
       "ingredientSpellings",
       ingredientSpellings_S,
       {}
-    );
+    )
 
     /*
       Add altering commands here.
@@ -38,6 +38,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-    return await queryInterface.bulkDelete("ingredientSpellings", null, {});
-  },
-};
+    return await queryInterface.bulkDelete("ingredientSpellings", null, {})
+  }
+}

@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 module.exports = (sequelize, DataTypes) => {
   const recipe = sequelize.define(
     "recipe",
@@ -9,14 +9,16 @@ module.exports = (sequelize, DataTypes) => {
       cookTime: DataTypes.STRING,
       image: DataTypes.STRING,
       recipeInstructions: DataTypes.STRING,
-      userId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER
     },
     {}
-  );
+  )
   recipe.associate = function (models) {
     // associations can be defined here
-    recipe.belongsTo(models.user);
-    recipe.hasMany(models.recipeIngredients);
-  };
-  return recipe;
-};
+    recipe.belongsTo(models.user)
+    recipe.hasMany(models.recipeIngredients, {
+      foreignKey: "recipeId"
+    })
+  }
+  return recipe
+}

@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
           include: [
             {
               model: IngredientSpelling,
-              attributes: ["spelling"]
+              attributes: ["spelling", "ingredientId"]
             }
           ]
         }
@@ -59,8 +59,9 @@ router.get("/", async (req, res) => {
       updatedAt: r.updatedAt,
       recipeIngredients: r.recipeIngredients.map((r) => ({
         id: r.id,
+        ingredientId: r.ingredientSpelling.ingredientId,
         ingredientQuantity: r.ingredientQuantity,
-        recipeIngredient: r.ingredientSpelling.spelling
+        ingredientSpelling: r.ingredientSpelling.spelling
       }))
     }))
 
@@ -75,25 +76,117 @@ router.get("/", async (req, res) => {
   }
 })
 
-//THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS
+//This route gets detailed recipes filtered by a list of ingredients Ids (i.e. a food palette)
 router.get("/query", async (req, res) => {
-  const queriedIngredients = JSON.parse(req.query.ingredients)
-  console.log("body", req.body)
-  const allRecipes = await Recipe.findAll({
-    include: {
-      model: Ingredient
-    }
-  })
-  const queriedRecipes = allRecipes.reduce((acc, rec) => {
-    const recipeIngIds = rec.ingredients.map((i) => i.id)
-    const valid = queriedIngredients.every((id) => recipeIngIds.includes(id))
-    return valid ? [...acc, rec] : acc
-  }, [])
+  try {
+    const queriedIngredientIds = JSON.parse(req.query.ingredientIds)
 
-  res.json({
-    message: "Recipes filtered by palette delivered",
-    result: queriedRecipes
-  })
+    const limit = req.query.limit || 10
+    const offset =
+      req.query.offset ||
+      0```Currently filtering is implemented by retrieving all Ingredients (including associated Recipe Ids) 
+      from queried ingredients (independent of ingredient spelling such as 'potato' vs 'potato'),
+      filtered for intersecting Recipe ids. These are re-queried and return with details.
+      This is not max performant, yet a direct query seems complicated in Sequelize and allows relatively easy formatting too.
+      ```
+    const ingredientsAndRecipes = await Ingredient.findAll({
+      where: { id: queriedIngredientIds },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"]
+      },
+      include: [
+        {
+          model: IngredientSpelling,
+
+          include: {
+            model: RecipeIngredient,
+            attributes: ["recipeId"]
+          }
+        }
+      ]
+    })
+
+    async function extractRecipeIds(ingredientsAndRecipes) {
+      const recipesWithIngredients = await ingredientsAndRecipes.map(
+        (i) =>
+          // ({
+          // ingredientId: i.id,
+          // ingredientName: i.name,
+          // occursInRecipe:
+          i.ingredientSpellings
+            .map((o) => o.recipeIngredients)[0]
+            .map((r) => r.recipeId)
+        // })
+      )
+
+      const listOfRecipeIds = await recipesWithIngredients.reduce((a, b) =>
+        b.filter(Set.prototype.has, new Set(a))
+      )
+      return listOfRecipeIds
+    }
+
+    const listOfRecipeIds = await extractRecipeIds(ingredientsAndRecipes)
+
+    // const formattedRecipes = queryResult.rows
+
+    const queryResult = await Recipe.findAndCountAll({
+      limit,
+      offset,
+      where: { id: listOfRecipeIds },
+      order: [["createdAt", "DESC"]],
+
+      //Prevent returning unneeded information and sensitive information like hashed password
+      attributes: { exclude: ["userId"] },
+      include: [
+        {
+          model: User,
+          attributes: {
+            exclude: ["password", "email", "createdAt", "updatedAt"]
+          } //Prevent returning hashed password
+        },
+        {
+          model: RecipeIngredient,
+          attributes: ["id", "ingredientQuantity"],
+
+          include: [
+            {
+              model: IngredientSpelling,
+              attributes: ["spelling", "ingredientId"]
+            }
+          ]
+        }
+      ]
+    })
+
+    // The recipes list of JSON objects is nested too many levels, so flatten and properly format
+    const formattedRecipes = await queryResult.rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      description: r.description,
+      user: r.user,
+      recipeYield: r.recipeYield,
+      cookTime: r.cookTime,
+      image: r.image,
+      recipeInstructions: r.recipeInstructions,
+      createdAt: r.createdAt,
+      updatedAt: r.updatedAt,
+      recipeIngredients: r.recipeIngredients.map((r) => ({
+        id: r.id,
+        ingredientId: r.ingredientSpelling.ingredientId,
+        ingredientQuantity: r.ingredientQuantity,
+        ingredientSpelling: r.ingredientSpelling.spelling
+      }))
+    }))
+
+    const responseObject = {
+      message: `All recipes filtered for ingredient(s ${queriedIngredientIds}, delivering recipe(s) ${listOfRecipeIds}`,
+      filteredRecipes: { count: queryResult.count, rows: formattedRecipes }
+    }
+
+    res.status(200).send(responseObject)
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 //This route gets single detailed recipe by ID.
@@ -165,7 +258,7 @@ router.get("/:id", async (req, res) => {
   }
 })
 
-//THIS UNLIKELY WORKS DUE TO CHANGE IN MODELS
+//This posts a new recipe, while only existing ingredients can be used
 router.post("/", auth, async (req, res) => {
   try {
     const {

@@ -1,14 +1,14 @@
-"use strict";
-const ingredients = require("../referencedata/curatedIngredients.js");
+"use strict"
+const ingredients = require("../referencedata/curatedIngredients.js")
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const ingredientNames = ingredients.map((i) => ({
-      name: i.name_NL_S,
+      representation: i.representation,
       createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
-    return await queryInterface.bulkInsert("ingredients", ingredientNames, {});
+      updatedAt: new Date()
+    }))
+    return await queryInterface.bulkInsert("ingredients", ingredientNames, {})
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -22,7 +22,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return await queryInterface.bulkDelete("ingredients", null, {});
+    return await queryInterface.bulkDelete("ingredients", null, {})
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
@@ -30,5 +30,5 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-  },
-};
+  }
+}

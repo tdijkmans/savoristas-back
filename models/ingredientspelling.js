@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 module.exports = (sequelize, DataTypes) => {
   const ingredientSpelling = sequelize.define(
     "ingredientSpelling",
@@ -7,14 +7,15 @@ module.exports = (sequelize, DataTypes) => {
 
       plurality: DataTypes.STRING,
       synonym: DataTypes.BOOLEAN,
-      ingredientId: DataTypes.INTEGER,
+      ingredientId: DataTypes.INTEGER
     },
     {}
-  );
+  )
   ingredientSpelling.associate = function (models) {
     // associations can be defined here
-    ingredientSpelling.belongsTo(models.ingredient);
-  };
+    ingredientSpelling.belongsTo(models.ingredient)
+    ingredientSpelling.hasMany(models.recipeIngredients)
+  }
 
-  return ingredientSpelling;
-};
+  return ingredientSpelling
+}

@@ -15,35 +15,35 @@ module.exports = {
         {
           recipeId: 1,
           ingredientQuantity: "een bolletje",
-          ingredientSpellingId: 249,
+          ingredientSpellingId: 64,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           recipeId: 1,
           ingredientQuantity: "100 ml",
-          ingredientSpellingId: 250,
+          ingredientSpellingId: 65,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           recipeId: 1,
           ingredientQuantity: "1 hele",
-          ingredientSpellingId: 188,
+          ingredientSpellingId: 72,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           recipeId: 1,
           ingredientQuantity: "2 stuks",
-          ingredientSpellingId: 20,
+          ingredientSpellingId: 312,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           recipeId: 2,
           ingredientQuantity: "100 ml",
-          ingredientSpellingId: 250,
+          ingredientSpellingId: 65,
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -64,14 +64,14 @@ module.exports = {
         {
           recipeId: 2,
           ingredientQuantity: "een bolletje",
-          ingredientSpellingId: 249,
+          ingredientSpellingId: 64,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           recipeId: 3,
           ingredientQuantity: "100 ml",
-          ingredientSpellingId: 250,
+          ingredientSpellingId: 65,
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -99,7 +99,7 @@ module.exports = {
         {
           recipeId: 4,
           ingredientQuantity: "100 ml",
-          ingredientSpellingId: 250,
+          ingredientSpellingId: 65,
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -120,7 +120,7 @@ module.exports = {
         {
           recipeId: 5,
           ingredientQuantity: "100 ml",
-          ingredientSpellingId: 250,
+          ingredientSpellingId: 65,
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -134,7 +134,7 @@ module.exports = {
         {
           recipeId: 5,
           ingredientQuantity: "een bolletje",
-          ingredientSpellingId: 249,
+          ingredientSpellingId: 64,
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -146,7 +146,7 @@ module.exports = {
           updatedAt: new Date()
         },
         {
-          recipeId: 3,
+          recipeId: 5,
           ingredientQuantity: "een bosje",
           ingredientSpellingId: 73,
           createdAt: new Date(),
@@ -155,7 +155,7 @@ module.exports = {
         {
           recipeId: 6,
           ingredientQuantity: "100 ml",
-          ingredientSpellingId: 250,
+          ingredientSpellingId: 65,
           createdAt: new Date(),
           updatedAt: new Date()
         },
@@ -183,31 +183,25 @@ module.exports = {
         {
           recipeId: 7,
           ingredientQuantity: "2 theelepels",
-          ingredientSpellingId: 73,
+          ingredientSpellingId: 2,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           recipeId: 8,
           ingredientQuantity: "1 kg",
-          ingredientSpellingId: 186,
+          ingredientSpellingId: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           recipeId: 8,
-          ingredientQuantity: "2 theelepels",
-          ingredientSpellingId: 73,
+          ingredientQuantity: "1 kg",
+          ingredientSpellingId: 2,
           createdAt: new Date(),
           updatedAt: new Date()
         },
-        {
-          recipeId: 8,
-          ingredientQuantity: "een flink stuk",
-          ingredientSpellingId: 208,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
+
         {
           recipeId: 9,
           ingredientQuantity: "een flink stuk",
@@ -233,7 +227,7 @@ module.exports = {
         {
           recipeId: 10,
           ingredientQuantity: "100 ml",
-          ingredientSpellingId: 250,
+          ingredientSpellingId: 65,
           createdAt: new Date(),
           updatedAt: new Date()
         }
