@@ -82,13 +82,12 @@ router.get("/query", async (req, res) => {
     const queriedIngredientIds = JSON.parse(req.query.ingredientIds)
 
     const limit = req.query.limit || 10
-    const offset =
-      req.query.offset ||
-      0```Currently filtering is implemented by retrieving all Ingredients (including associated Recipe Ids) 
-      from queried ingredients (independent of ingredient spelling such as 'potato' vs 'potato'),
-      filtered for intersecting Recipe ids. These are re-queried and return with details.
-      This is not max performant, yet a direct query seems complicated in Sequelize and allows relatively easy formatting too.
-      ```
+    const offset = req.query.offset || 0
+    //Currently filtering is implemented by retrieving all Ingredients (including associated Recipe Ids)
+    //from queried ingredients (independent of ingredient spelling such as 'potato' vs 'potato'),
+    //filtered for intersecting Recipe ids. These are re-queried and return with details.
+    //This is not max performant, yet a direct query seems complicated in Sequelize and allows relatively easy formatting too.
+
     const ingredientsAndRecipes = await Ingredient.findAll({
       where: { id: queriedIngredientIds },
       attributes: {

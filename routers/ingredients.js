@@ -12,42 +12,37 @@ const RecipeIngredient = require("../models").recipeIngredients
 const router = new Router()
 
 router.get("/", async (req, res) => {
-  const limit = req.query.limit || 8
-  const offset = req.query.offset || 0
-  const IngredientSpellings = await IngredientSpelling.findAndCountAll({
-    limit,
-    offset,
-    include: { all: true, nested: true },
-    order: [["createdAt", "DESC"]]
-  })
-  res
-    .status(200)
-    .send({ message: "All IngredientSpelling delivered", IngredientSpellings })
+  try {
+    const ingredients = await Ingredient.findAndCountAll({
+      include: { model: IngredientSpelling },
+      order: [["id", "ASC"]]
+    })
+    res.status(200).send({ message: "All ingredients delivered", ingredients })
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 router.get("/:id", async (req, res) => {
-  const { id } = req.params
+  try {
+    const { id } = req.params
 
-  console.log(id)
-  if (isNaN(parseInt(id))) {
-    return res.status(400).send({
-      message: `${id} is not a valid id number, the IngredientSpelling does not exist.`
+    if (isNaN(parseInt(id))) {
+      return res.status(400).send({
+        message: `${id} is not a valid id number, the ingredient does not exist.`
+      })
+    }
+
+    const ingredient = await Ingredient.findByPk(id, {
+      include: { model: IngredientSpelling }
     })
+
+    res
+      .status(200)
+      .send({ message: `Ingredient with id ${id} delivered.`, ingredient })
+  } catch (e) {
+    console.log(e)
   }
-
-  const spelling = await IngredientSpelling.findByPk(id, {
-    include: { all: true, nested: true }
-  })
-
-  if (spelling === null) {
-    return res
-      .status(404)
-      .send({ message: `IngredientSpelling with id ${id} is not found.` })
-  }
-
-  res
-    .status(200)
-    .send({ message: `IngredientSpelling with id ${id} delivered.`, spelling })
 })
 
 module.exports = router

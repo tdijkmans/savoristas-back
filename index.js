@@ -83,6 +83,9 @@ app.use("/palettes", palettesRouter)
 const ingredientsRouter = require("./routers/ingredients")
 app.use("/ingredients", ingredientsRouter)
 
+const ingredientSpellingsRouter = require("./routers/ingredientspellings")
+app.use("/ingredientspellings", ingredientSpellingsRouter)
+
 // Listen for connections on specified port (default is port 4000)
 const { PORT } = require("./config/constants")
 
