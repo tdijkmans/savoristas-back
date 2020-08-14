@@ -18,10 +18,10 @@ module.exports = {
           key: "id",
         },
       },
-      ingredientId: {
+      ingredientSpellingId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "ingredients",
+          model: "ingredientSpellings",
           key: "id",
         },
       },
