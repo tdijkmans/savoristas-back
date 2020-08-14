@@ -2779,5 +2779,15 @@ module.exports = [
     name_EN_S: "herring",
     name_EN_P: "herrings",
     hexcolor: "#F57F17"
+  },
+
+  {
+    pk: 310,
+    representation: "Szechuanpeper",
+    name_NL_S: "Szechuanpeper",
+    name_NL_P: "szechuanpepers",
+    name_EN_S: "Sichuan pepper",
+    name_EN_P: "Sichuan pepper",
+    hexcolor: "#F57F17"
   }
 ]

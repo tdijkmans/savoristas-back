@@ -10,35 +10,56 @@ module.exports = {
           description: "Grootmoeders tijd",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 1
+          userId: Math.floor(Math.random() * 9) + 1
         },
         {
           name: "Bruschetta!",
-          description: "Italie op zijn best",
+          description: "Italië op zijn best",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 1
+          userId: Math.floor(Math.random() * 9) + 1
         },
         {
           name: "Aan de Middelandse Zee",
-          description: "Goed voor ieder bbq",
+          description: "Goed voor ieder barbecuefeestje",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 2
+          userId: Math.floor(Math.random() * 9) + 1
         },
         {
           name: "Gember is geweldig",
-          description: "Maar niet voor iedereen",
+          description: "Als je er van houdt",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 2
+          userId: Math.floor(Math.random() * 9) + 1
         },
         {
           name: "Knoflook klassieker :-)",
           description: "Knoflook olijfolie basilicum",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 2
+          userId: Math.floor(Math.random() * 9) + 1
+        },
+        {
+          name: "Five Spices",
+          description: "Chinese glorie",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          userId: Math.floor(Math.random() * 9) + 1
+        },
+        {
+          name: "Fruitsalade!",
+          description: "Erg bijzondere combinatie",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          userId: Math.floor(Math.random() * 9) + 1
+        },
+        {
+          name: "De basics",
+          description: "Goed voor ieder bbq",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          userId: Math.floor(Math.random() * 9) + 1
         }
       ],
       {}

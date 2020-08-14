@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
       include: [
         {
           model: user,
-          attributes: ["name"]
+          attributes: ["name", "image"]
         },
         {
           model: paletteIngredient,
@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
       id: p.id,
       name: p.name,
       description: p.description,
-      user: { id: p.userId, name: p.user.name },
+      user: { id: p.userId, name: p.user.name, image: p.image },
       createdAt: p.createdAt,
       updatedAt: p.updatedAt,
       paletteIngredients: p.paletteIngredients.map((i) => ({

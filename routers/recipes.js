@@ -289,7 +289,7 @@ router.post("/", auth, async (req, res) => {
       name: name,
       description: description,
       recipeYield: recipeYield,
-      recipeInstructions: instructions,
+      recipeInstructions: instructions.toString(),
       cookTime: cookTime,
       userId: userId
     })
