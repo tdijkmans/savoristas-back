@@ -19,7 +19,8 @@ module.exports = {
         {
           name: "Bobby Flay",
           email: "Bobby@Flay.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -27,7 +28,8 @@ module.exports = {
         {
           name: "Wolfgand Puck",
           email: "wolfgang@puck.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -35,7 +37,8 @@ module.exports = {
         {
           name: "Giada De Laurentis",
           email: "Giada@DeLaurentis.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -43,7 +46,8 @@ module.exports = {
         {
           name: "Ina Garten",
           email: "Ina@Garten.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -51,7 +55,8 @@ module.exports = {
         {
           name: "Thomas Dijkmans",
           email: "thomas@dijkmans.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -59,7 +64,8 @@ module.exports = {
         {
           name: "Crazy Chef Chris:-)",
           email: "carzy@chef.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -67,7 +73,8 @@ module.exports = {
         {
           name: "BBQ Master Jane",
           email: "eat@meat.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
@@ -76,7 +83,8 @@ module.exports = {
         {
           name: "Salade Goeroe Gerard",
           email: "blaadje@sla.com",
-          image: " ",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/6/6f/Gordon_Ramsay.jpg",
           password: bcrypt.hashSync("kook1234", SALT_ROUNDS),
           createdAt: new Date(),
           updatedAt: new Date()
